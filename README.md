@@ -1,40 +1,40 @@
 # auth-lab
 
-> **AVISO:** este repositório é intencionalmente vulnerável. Existe só para aprendizagem. Nunca uses este código em produção.
+> **WARNING:** this repository is intentionally vulnerable. It exists for learning only. Never use this code in production.
 
-Laboratório de ataque e defesa: uma versão propositadamente insegura de uma API de autenticação, atacada com ferramentas reais e corrigida passo a passo. Complementa o projeto [auth-api](https://github.com/TMseabra/auth-api).
+An attack-and-defense lab: a deliberately insecure version of an authentication API, attacked with real tools and fixed step by step. It complements the [auth-api](https://github.com/TMseabra/auth-api) project.
 
-> Estado: em desenvolvimento (projeto de portefólio).
+> Status: work in progress (portfolio project).
 
-## Objetivo
+## Goal
 
-Mostrar o ciclo completo de segurança: encontrar falhas, explorá-las, documentá-las e corrigi-las. O histórico de commits serve de "antes e depois".
+Show the full security cycle: find flaws, exploit them, document them and fix them. The commit history acts as the "before and after".
 
-## Falhas planeadas (de propósito)
+## Planned flaws (on purpose)
 
-- JWT aceite sem validar a assinatura
-- Rotas de administração sem verificação de papel
-- Palavras-passe guardadas em texto simples
-- Mensagens de erro que revelam se o email existe
+- JWT accepted without verifying the signature
+- Admin routes without a role check
+- Passwords stored in plain text
+- Error messages that reveal whether an email exists
 
-## Ferramentas
+## Tools
 
 - OWASP ZAP
 - Burp Suite Community
-- OWASP Juice Shop (relatório curto à parte)
+- OWASP Juice Shop (short separate report)
 
-## Plano
+## Plan
 
-1. Criar a versão vulnerável (base simplificada do auth-api)
-2. Atacar com o ZAP e o Burp Suite e documentar cada falha encontrada
-3. Corrigir uma a uma, em commits separados
-4. Fazer o OWASP Juice Shop e escrever um relatório curto
-5. Resumir tudo numa tabela: falha, como foi explorada, correção
+1. Build the vulnerable version (simplified base of auth-api)
+2. Attack it with ZAP and Burp Suite and document each flaw found
+3. Fix them one by one, in separate commits
+4. Complete OWASP Juice Shop and write a short report
+5. Summarise everything in a table: flaw, how it was exploited, fix
 
-## Relatórios
+## Reports
 
-A preencher em /docs à medida que o laboratório avança.
+To be added under /docs as the lab progresses.
 
-## Aviso legal
+## Legal notice
 
-Testa apenas em ambientes teus (localhost). Atacar sistemas de terceiros sem autorização é crime.
+Only test against environments you own (localhost). Attacking third-party systems without permission is illegal.
