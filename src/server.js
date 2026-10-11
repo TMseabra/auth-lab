@@ -17,12 +17,21 @@ function signToken(payload) {
   return `${head}.${body}.${sig}`;
 }
 
-// FLAW 1: the token payload is decoded but the signature is never verified.
+function verifyToken(token) {
+  const [head, body, sig] = token.split('.');
+  if (!head || !body || !sig) throw new Error('malformed');
+  const expected = crypto.createHmac('sha256', SECRET).update(`${head}.${body}`).digest();
+  const given = Buffer.from(sig, 'base64url');
+  if (given.length !== expected.length || !crypto.timingSafeEqual(given, expected)) throw new Error('bad signature');
+  return JSON.parse(Buffer.from(body, 'base64url').toString());
+}
+
+// FIXED 1: the signature is verified before trusting the payload.
 function auth(req, res, next) {
   const header = req.headers.authorization || '';
   const token = header.replace('Bearer ', '');
   try {
-    req.user = JSON.parse(Buffer.from(token.split('.')[1], 'base64url').toString());
+    req.user = verifyToken(token);
     next();
   } catch {
     res.status(401).json({ error: 'invalid token' });
