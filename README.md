@@ -4,7 +4,7 @@
 
 An attack-and-defense lab: a deliberately insecure version of an authentication API, attacked with real tools and fixed step by step. It complements the [auth-api](https://github.com/TMseabra/auth-api) project.
 
-> Status: vulnerable API built and all 4 flaws fixed. Next: ZAP/Burp reports and Juice Shop.
+> Status: vulnerable API built, all 4 flaws fixed, ZAP active scan done. Next: Burp Suite manual pass and Juice Shop.
 
 ## Goal
 
@@ -42,7 +42,11 @@ Endpoints: `POST /register`, `POST /login`, `GET /me`, `GET /admin/users`. Flaws
 
 ## Reports
 
-To be added under /docs as the lab progresses.
+- [docs/vulnerabilities.md](docs/vulnerabilities.md) — each flaw, where it lives, and the ZAP active scan findings
+- [docs/exploitation-report.md](docs/exploitation-report.md) — manual exploitation of the 4 flaws with curl
+- [docs/zap-report.html](docs/zap-report.html) / [docs/zap-alerts.json](docs/zap-alerts.json) — full OWASP ZAP active scan report
+- [docs/zap-burp-plan.md](docs/zap-burp-plan.md) — manual Burp Suite walkthrough (pending, needs the GUI)
+- [docs/summary.md](docs/summary.md) — final table: flaw, exploitation, fix, tooling coverage
 
 ## Legal notice
 
