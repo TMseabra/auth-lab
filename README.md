@@ -4,7 +4,7 @@
 
 An attack-and-defense lab: a deliberately insecure version of an authentication API, attacked with real tools and fixed step by step. It complements the [auth-api](https://github.com/TMseabra/auth-api) project.
 
-> Status: step 1 done (vulnerable API built). Next: attack with ZAP and Burp.
+> Status: vulnerable API built and all 4 flaws fixed. Next: ZAP/Burp reports and Juice Shop.
 
 ## Goal
 
@@ -35,7 +35,7 @@ Show the full security cycle: find flaws, exploit them, document them and fix th
 
 ```
 npm install
-npm start   # http://127.0.0.1:3000
+npm start   # http://127.0.0.1:3000 (set ADMIN_PASSWORD to seed admin@lab.local)
 ```
 
 Endpoints: `POST /register`, `POST /login`, `GET /me`, `GET /admin/users`. Flaws are listed in [docs/vulnerabilities.md](docs/vulnerabilities.md).

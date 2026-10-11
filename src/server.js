@@ -10,7 +10,19 @@ const users = []; // in-memory store: { id, email, password, role }
 
 // Seed an admin from the environment (there is no way to become admin via the API).
 if (process.env.ADMIN_PASSWORD) {
-  users.push({ id: 1, email: 'admin@lab.local', password: process.env.ADMIN_PASSWORD, role: 'admin' });
+  users.push({ id: 1, email: 'admin@lab.local', password: hashPassword(process.env.ADMIN_PASSWORD), role: 'admin' });
+}
+
+// FIXED 3: passwords are hashed with scrypt and a per-user salt.
+function hashPassword(password) {
+  const salt = crypto.randomBytes(16);
+  return `${salt.toString('hex')}:${crypto.scryptSync(password, salt, 64).toString('hex')}`;
+}
+
+function checkPassword(password, stored) {
+  const [salt, hash] = stored.split(':');
+  const actual = crypto.scryptSync(password, Buffer.from(salt, 'hex'), 64);
+  return crypto.timingSafeEqual(actual, Buffer.from(hash, 'hex'));
 }
 
 const b64 = (obj) => Buffer.from(JSON.stringify(obj)).toString('base64url');
@@ -47,8 +59,7 @@ app.post('/register', (req, res) => {
   const { email, password } = req.body || {};
   if (!email || !password) return res.status(400).json({ error: 'email and password required' });
   if (users.find((u) => u.email === email)) return res.status(409).json({ error: 'email already registered' });
-  // FLAW 3: password stored in plain text.
-  const user = { id: users.length + 1, email, password, role: 'user' };
+  const user = { id: users.length + 1, email, password: hashPassword(password), role: 'user' };
   users.push(user);
   res.status(201).json({ id: user.id, email: user.email });
 });
@@ -56,9 +67,8 @@ app.post('/register', (req, res) => {
 app.post('/login', (req, res) => {
   const { email, password } = req.body || {};
   const user = users.find((u) => u.email === email);
-  // FLAW 4: different errors reveal whether the email exists (user enumeration).
-  if (!user) return res.status(404).json({ error: 'email not found' });
-  if (user.password !== password) return res.status(401).json({ error: 'wrong password' });
+  // FIXED 4: same error whether the email or the password is wrong.
+  if (!user || !checkPassword(password, user.password)) return res.status(401).json({ error: 'invalid credentials' });
   res.json({ token: signToken({ sub: user.id, email: user.email, role: user.role }) });
 });
 
@@ -70,7 +80,8 @@ function requireAdmin(req, res, next) {
   next();
 }
 
-app.get('/admin/users', auth, requireAdmin, (req, res) => res.json(users));
+app.get('/admin/users', auth, requireAdmin, (req, res) =>
+  res.json(users.map(({ id, email, role }) => ({ id, email, role }))));
 
 const port = process.env.PORT || 3000;
 app.listen(port, '127.0.0.1', () => console.log(`auth-lab (VULNERABLE) on http://127.0.0.1:${port}`));

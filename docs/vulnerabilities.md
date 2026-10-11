@@ -1,6 +1,8 @@
-# Vulnerabilities (before fixing)
+# Vulnerabilities and fixes
 
-| # | Flaw | Where | How to exploit | Fix (planned) |
+All four flaws below are now fixed in the current code. Use `git log` to check out the vulnerable version (commit `483ed2d`) for attacking.
+
+| # | Flaw | Where | How to exploit | Fix (applied) |
 |---|------|-------|----------------|---------------|
 | 1 | JWT signature not verified | `auth()` in src/server.js | Edit the payload (e.g. `"role":"admin"`), keep any signature, send it | Verify with `crypto`/`jsonwebtoken`, reject bad signatures |
 | 2 | Admin route without role check | `GET /admin/users` | Call it with any valid (or forged) token | Require `role === 'admin'` |
