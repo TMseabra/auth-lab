@@ -9,4 +9,6 @@ All four flaws below are now fixed in the current code. Use `git log` to check o
 | 3 | Plain text passwords | `POST /register` | Dump `/admin/users` and read passwords | Hash with bcrypt/argon2 |
 | 4 | User enumeration | `POST /login` | `404 email not found` vs `401 wrong password` | Same generic error for both |
 
-ZAP/Burp findings will be added here as the lab progresses.
+Manual exploitation evidence (curl, run by hand against commit `483ed2d`) is in
+[exploitation-report.md](exploitation-report.md). ZAP/Burp findings will be added here as the lab
+progresses.
