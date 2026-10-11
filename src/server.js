@@ -8,6 +8,11 @@ app.use(express.json());
 const SECRET = 'secret';
 const users = []; // in-memory store: { id, email, password, role }
 
+// Seed an admin from the environment (there is no way to become admin via the API).
+if (process.env.ADMIN_PASSWORD) {
+  users.push({ id: 1, email: 'admin@lab.local', password: process.env.ADMIN_PASSWORD, role: 'admin' });
+}
+
 const b64 = (obj) => Buffer.from(JSON.stringify(obj)).toString('base64url');
 
 function signToken(payload) {
@@ -59,8 +64,13 @@ app.post('/login', (req, res) => {
 
 app.get('/me', auth, (req, res) => res.json(req.user));
 
-// FLAW 2: admin route only checks that a token exists, never the role.
-app.get('/admin/users', auth, (req, res) => res.json(users));
+// FIXED 2: only admins may list users.
+function requireAdmin(req, res, next) {
+  if (req.user.role !== 'admin') return res.status(403).json({ error: 'forbidden' });
+  next();
+}
+
+app.get('/admin/users', auth, requireAdmin, (req, res) => res.json(users));
 
 const port = process.env.PORT || 3000;
 app.listen(port, '127.0.0.1', () => console.log(`auth-lab (VULNERABLE) on http://127.0.0.1:${port}`));
