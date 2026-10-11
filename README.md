@@ -4,7 +4,7 @@
 
 An attack-and-defense lab: a deliberately insecure version of an authentication API, attacked with real tools and fixed step by step. It complements the [auth-api](https://github.com/TMseabra/auth-api) project.
 
-> Status: work in progress (portfolio project).
+> Status: step 1 done (vulnerable API built). Next: attack with ZAP and Burp.
 
 ## Goal
 
@@ -30,6 +30,15 @@ Show the full security cycle: find flaws, exploit them, document them and fix th
 3. Fix them one by one, in separate commits
 4. Complete OWASP Juice Shop and write a short report
 5. Summarise everything in a table: flaw, how it was exploited, fix
+
+## Running the vulnerable API
+
+```
+npm install
+npm start   # http://127.0.0.1:3000
+```
+
+Endpoints: `POST /register`, `POST /login`, `GET /me`, `GET /admin/users`. Flaws are listed in [docs/vulnerabilities.md](docs/vulnerabilities.md).
 
 ## Reports
 
